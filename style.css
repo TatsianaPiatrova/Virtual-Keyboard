@@ -49,21 +49,12 @@ body{
 .enter-key{
     width: 125px;
 }
+.slash{
+    width: 100px;
+}
 .space-key{
     max-width: 400px;
     width: 100%;
-}
-.text{
-    max-width: 1024px;
-    width: 100%;
-    height: 100px;
-    margin-bottom: 50px;
-    font-size: 20px;
-    border: none;
-    outline: none;
-    background-color: rgb(216, 215, 215);
-    padding-left: 10px;
-    transition: .2s;
 }
 .keys.active{
     background-color: rgb(227, 168, 255);
@@ -72,6 +63,25 @@ body{
 }
 .keys.remove{
     animation: keys-animation 0.5s forwards;
+}
+.caps-key{
+    position: relative;
+}
+.caps-key::after {
+    content: '';
+    border: 3px solid rgb(245, 237, 232);
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+  }  
+
+.caps-key.active{
+    background-color: #fff;
+    color: #000000;
+}
+.caps-key.active::after {
+    border-color: #698e6d;
 }
 @keyframes keys-animation {
     0%{
@@ -83,3 +93,18 @@ body{
         color: black;
     }
 }
+textarea {
+    width: 1024px;
+    height: 150px;
+    outline: none;
+    border: none;
+    resize: none;
+    border-radius: 8px;
+    margin-bottom: 50px;
+    background-color: rgb(184, 184, 184);
+    box-shadow: 0 10px 38px rgb(0 0 0 / 30%), 0 15px 12px rgb(0 0 0 / 22%);
+    caret-color: #000000;
+    padding: 10px;
+    padding-bottom: 0;
+  }
+  

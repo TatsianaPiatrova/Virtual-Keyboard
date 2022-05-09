@@ -20,7 +20,6 @@ let alt_left = document.querySelector('.alt-left-key');
 let keyboard = document.querySelector('.keyboard-keys');
 const textArea = document.querySelector('textarea');
 const simbols = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '{', '}', '/', ':', '"', '<', '>', '?']
-let flag = false;
 
 function shiftClick() {
     let j = 0;
@@ -46,6 +45,23 @@ function shiftUp() {
     }
 }
 
+function capsClick(){
+    for (let i = 0; i < keys.length; i++) {
+        if (keys[i].classList.contains('letter')) {
+            keys[i].textContent = `${keys[i].getAttribute('toUpperCase')}`
+        }
+    }
+}
+
+function capsUp(){
+    for (let i = 0; i < keys.length; i++) {
+        if (keys[i].classList.contains('letter')) {
+            keys[i].textContent = `${keys[i].getAttribute('lowerCaseName')}`
+        }
+    }
+}
+
+
 for (let i = 0; i < keys.length; i++) {
     keys[i].setAttribute('keyname', keys[i].innerText)
     keys[i].setAttribute('lowerCaseName', keys[i].innerText.toLowerCase())
@@ -55,7 +71,7 @@ for (let i = 0; i < keys.length; i++) {
     }
 }
 
-keyboard.addEventListener('click', function (keyEvent) {
+keyboard.addEventListener('mousedown', function (keyEvent) {
     textArea.focus();
     const key = keyEvent.target.closest('.keys')
     for (let i = 0; i < keys.length; i++) {
@@ -65,33 +81,17 @@ keyboard.addEventListener('click', function (keyEvent) {
                 localStorage.setItem('caps', 0);
                 keys[i].classList.remove('active');
                 keys[i].classList.add('remove');
-                for (let i = 0; i < keys.length; i++) {
-                    if (keys[i].classList.contains('letter')) {
-                        keys[i].textContent = `${keys[i].getAttribute('lowerCaseName')}`
-                    }
-                }
+                capsUp();
                 return
             }
             if (keys[i].classList.contains('caps-key') && localStorage.getItem('caps') == 0) {
                 keys[i].classList.add('active');
-                for (let i = 0; i < keys.length; i++) {
-                    if (keys[i].classList.contains('letter')) {
-                        keys[i].textContent = `${keys[i].getAttribute('toUpperCase')}`
-                    }
-                }
+                capsClick();
                 localStorage.setItem('caps', 1);
                 return
             }
             if (keys[i].classList.contains('shift-key')) {
-                if (flag) {
-                    shiftUp();
-                    flag = false;
-                }
-                else {
-                    console.log('shift')
-                    shiftClick();
-                    flag = true;
-                }
+                shiftClick();
             }
             if (keys[i].classList.contains('letter') || keys[i].classList.contains('simbol'))
                 textArea.value += keys[i].textContent;
@@ -134,6 +134,19 @@ keyboard.addEventListener('click', function (keyEvent) {
     }
 
 })
+
+
+keyboard.addEventListener('mouseup', function (keyEvent) {
+    const key = keyEvent.target.closest('.keys')
+    for (let i = 0; i < keys.length; i++) {
+        if (key.getAttribute('keyname') == keys[i].getAttribute('keyname')) {
+            if (keys[i].classList.contains('shift-key')) {
+                shiftUp();
+            }
+        }
+    }
+})
+
 
 window.addEventListener('keydown', function (e) {
     for (let i = 0; i < keys.length; i++) {
@@ -188,18 +201,10 @@ window.addEventListener('keydown', function (e) {
                 localStorage.setItem('caps', 1);
             else localStorage.setItem('caps', 0);
             if (this.localStorage.getItem('caps') == 1) {
-                for (let i = 0; i < keys.length; i++) {
-                    if (keys[i].classList.contains('letter')) {
-                        keys[i].textContent = `${keys[i].getAttribute('toUpperCase')}`
-                    }
-                }
+                capsClick()
             }
             else {
-                for (let i = 0; i < keys.length; i++) {
-                    if (keys[i].classList.contains('letter')) {
-                        keys[i].textContent = `${keys[i].getAttribute('lowerCaseName')}`
-                    }
-                }
+                capsUp();
             }
             i = keys.length;
         }

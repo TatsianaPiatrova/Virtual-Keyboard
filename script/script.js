@@ -19,10 +19,10 @@ let alt_left = document.querySelector('.alt-left-key');
 let keyboard = document.querySelector('.keyboard-keys');
 const textArea = document.querySelector('textarea');
 
-
 for (let i = 0; i < keys.length; i++) {
     keys[i].setAttribute('keyname', keys[i].innerText)
     keys[i].setAttribute('lowerCaseName', keys[i].innerText.toLowerCase())
+    keys[i].setAttribute('toUpperCase', keys[i].innerText.toUpperCase())
     if (keys[i].classList.contains('letter')) {
         keys[i].textContent = `${keys[i].getAttribute('lowerCaseName')}`
     }
@@ -35,7 +35,27 @@ keyboard.addEventListener('click', function (keyEvent) {
         if (key.getAttribute('keyname') == keys[i].getAttribute('keyname')) {
             console.log(localStorage.getItem('caps'))
             keys[i].classList.add('active');
-            
+            if (keys[i].classList.contains('caps-key') && localStorage.getItem('caps')==1) {
+                localStorage.setItem('caps', 0);
+                keys[i].classList.remove('active');
+                keys[i].classList.add('remove');
+                for (let i = 0; i < keys.length; i++) {
+                    if (keys[i].classList.contains('letter')) {
+                        keys[i].textContent = `${keys[i].getAttribute('lowerCaseName')}`
+                    }
+                    console.log('caps')
+                }
+            }
+            if (keys[i].classList.contains('caps-key') && localStorage.getItem('caps')==0) {
+                keys[i].classList.add('active');
+                for (let i = 0; i < keys.length; i++) {
+                    if (keys[i].classList.contains('letter')) {
+                        keys[i].textContent = `${keys[i].getAttribute('toUpperCase')}`
+                    }
+                    console.log('caps2')
+                }
+                localStorage.setItem('caps', 1);
+            }
             if (keys[i].classList.contains('letter') || keys[i].classList.contains('simbol'))
                 textArea.value += keys[i].textContent;
             if (keys[i].classList.contains('backspace-key')) {
@@ -65,10 +85,14 @@ keyboard.addEventListener('click', function (keyEvent) {
             if (keys[i].classList.contains('pg-right-key')) {
                 textArea.selectionEnd += 1;
                 textArea.selectionStart = textArea.selectionEnd;
-            }           
+            }
         }
         setTimeout(() => {
-            keys[i].classList.remove('active')
+            if (keys[i].classList.contains('caps-key') && localStorage.getItem('caps')){
+                return
+            }
+            else
+                keys[i].classList.remove('active')
         }, 200)
     }
 
@@ -127,7 +151,6 @@ window.addEventListener('keydown', function (e) {
             if (this.localStorage.getItem('caps') == 1) {
                 for (let i = 0; i < keys.length; i++) {
                     if (keys[i].classList.contains('letter')) {
-                        keys[i].setAttribute('toUpperCase', keys[i].innerText.toUpperCase())
                         keys[i].textContent = `${keys[i].getAttribute('toUpperCase')}`
                     }
                 }

@@ -45,6 +45,7 @@ keyboard.addEventListener('click', function (keyEvent) {
                     }
                     console.log('caps')
                 }
+                return
             }
             if (keys[i].classList.contains('caps-key') && localStorage.getItem('caps')==0) {
                 keys[i].classList.add('active');
@@ -55,6 +56,7 @@ keyboard.addEventListener('click', function (keyEvent) {
                     console.log('caps2')
                 }
                 localStorage.setItem('caps', 1);
+                return
             }
             if (keys[i].classList.contains('letter') || keys[i].classList.contains('simbol'))
                 textArea.value += keys[i].textContent;

@@ -31,7 +31,7 @@ export default `    <div class="container">
             <div class="keys letter">P</div>
             <div class="keys simbol">[</div>
             <div class="keys simbol">]</div>
-            <div class="keys slash simbol">|</div>
+            <div class="keys slash simbol">\\</div>
         </div>
         <div class="row">
             <div class="keys caps-key">Caps Lock</div>

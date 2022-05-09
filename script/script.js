@@ -8,6 +8,7 @@ let keys = document.querySelectorAll('.keys');
 let space = document.querySelector('.space-key');
 let shift_right = document.querySelector('.shift-right');
 let shift_left = document.querySelector('.shift-left');
+let shift = document.querySelector('.shift-key');
 let caps_lock = document.querySelector('.caps-key');
 let enter = document.querySelector('.enter-key');
 let tab = document.querySelector('.tab-key');
@@ -18,6 +19,32 @@ let alt_right = document.querySelector('.alt-right-key');
 let alt_left = document.querySelector('.alt-left-key');
 let keyboard = document.querySelector('.keyboard-keys');
 const textArea = document.querySelector('textarea');
+const simbols = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '{', '}', '/', ':', '"', '<', '>', '?']
+let flag = false;
+
+function shiftClick() {
+    let j = 0;
+    for (let i = 0; i < keys.length; i++) {
+        if (keys[i].classList.contains('simbol')) {
+            keys[i].textContent = simbols[j];
+            j++;
+        }
+        if (keys[i].classList.contains('letter')) {
+            keys[i].textContent = `${keys[i].getAttribute('toUpperCase')}`
+        }
+    }
+}
+
+function shiftUp() {
+    for (let i = 0; i < keys.length; i++) {
+        if (keys[i].classList.contains('letter')) {
+            keys[i].textContent = `${keys[i].getAttribute('lowerCaseName')}`
+        }
+        if (keys[i].classList.contains('simbol')) {
+            keys[i].textContent = `${keys[i].getAttribute('keyname')}`
+        }
+    }
+}
 
 for (let i = 0; i < keys.length; i++) {
     keys[i].setAttribute('keyname', keys[i].innerText)
@@ -33,9 +60,8 @@ keyboard.addEventListener('click', function (keyEvent) {
     const key = keyEvent.target.closest('.keys')
     for (let i = 0; i < keys.length; i++) {
         if (key.getAttribute('keyname') == keys[i].getAttribute('keyname')) {
-            console.log(localStorage.getItem('caps'))
             keys[i].classList.add('active');
-            if (keys[i].classList.contains('caps-key') && localStorage.getItem('caps')==1) {
+            if (keys[i].classList.contains('caps-key') && localStorage.getItem('caps') == 1) {
                 localStorage.setItem('caps', 0);
                 keys[i].classList.remove('active');
                 keys[i].classList.add('remove');
@@ -43,20 +69,29 @@ keyboard.addEventListener('click', function (keyEvent) {
                     if (keys[i].classList.contains('letter')) {
                         keys[i].textContent = `${keys[i].getAttribute('lowerCaseName')}`
                     }
-                    console.log('caps')
                 }
                 return
             }
-            if (keys[i].classList.contains('caps-key') && localStorage.getItem('caps')==0) {
+            if (keys[i].classList.contains('caps-key') && localStorage.getItem('caps') == 0) {
                 keys[i].classList.add('active');
                 for (let i = 0; i < keys.length; i++) {
                     if (keys[i].classList.contains('letter')) {
                         keys[i].textContent = `${keys[i].getAttribute('toUpperCase')}`
                     }
-                    console.log('caps2')
                 }
                 localStorage.setItem('caps', 1);
                 return
+            }
+            if (keys[i].classList.contains('shift-key')) {
+                if (flag) {
+                    shiftUp();
+                    flag = false;
+                }
+                else {
+                    console.log('shift')
+                    shiftClick();
+                    flag = true;
+                }
             }
             if (keys[i].classList.contains('letter') || keys[i].classList.contains('simbol'))
                 textArea.value += keys[i].textContent;
@@ -90,7 +125,7 @@ keyboard.addEventListener('click', function (keyEvent) {
             }
         }
         setTimeout(() => {
-            if (keys[i].classList.contains('caps-key') && localStorage.getItem('caps')){
+            if (keys[i].classList.contains('caps-key') && localStorage.getItem('caps')) {
                 return
             }
             else
@@ -112,11 +147,13 @@ window.addEventListener('keydown', function (e) {
             i = keys.length;
         }
         if (e.code == 'ShiftLeft') {
-            shift_right.classList.remove('active');
+            shiftClick();
+            shift_left.classList.add('active')
             i = keys.length;
         }
         if (e.code == 'ShiftRight') {
-            shift_left.classList.remove('active');
+            shiftClick();
+            shift_right.classList.add('active');
             i = keys.length;
         }
         if (e.ctrlKey) {
@@ -191,10 +228,13 @@ window.addEventListener('keyup', function (e) {
             space.classList.add('remove');
         }
         if (e.code == 'ShiftLeft') {
-            shift_right.classList.remove('active');
+            shiftUp();
+            shift_left.classList.remove('active');
+            shift_left.classList.add('remove');
             shift_right.classList.remove('remove');
         }
         if (e.code == 'ShiftRight') {
+            shiftUp();
             shift_left.classList.remove('active');
             shift_left.classList.remove('remove');
         }
